@@ -1,0 +1,33 @@
+<div>
+    <label for="table-name">Nombre de la tabla:</label>
+    <input class="input" type="text" id="table-name" [(ngModel)]="tableName">
+  </div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Season</th>
+        <th>DOW</th>
+        <th>Period</th>
+        <th>Start Hour</th>
+        <th>End Hour</th>
+        <th>Op. Mode</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of tableData; let i = index">
+        <td><input class="inputs" type="text" [(ngModel)]="row.season"></td>
+        <td><input class="inputs" type="number" [(ngModel)]="row.dow"></td>
+        <td><input class="inputs" type="number" [(ngModel)]="row.period"></td>
+        <td><input class="inputs" type="time" [(ngModel)]="row.startHour"></td>
+        <td><input class="inputs" type="time" [(ngModel)]="row.endHour"></td>
+        <td><input class="inputs" type="number" [(ngModel)]="row.opMode"></td>
+        <td style="display: flex; justify-content: center;"><button (click)="deleteRow(i)">Eliminar</button></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <button (click)="addRow()">Agregar Fila</button>
+  <button style="margin-left: 10px;" (click)="saveTable()">Guardar Tabla</button>
+  
