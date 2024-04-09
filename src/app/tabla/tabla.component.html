@@ -1,33 +1,48 @@
-<div>
-    <label for="table-name">Nombre de la tabla:</label>
-    <input class="input" type="text" id="table-name" [(ngModel)]="tableName">
-  </div>
-  
-  <table>
-    <thead>
-      <tr>
-        <th>Season</th>
-        <th>DOW</th>
-        <th>Period</th>
-        <th>Start Hour</th>
-        <th>End Hour</th>
-        <th>Op. Mode</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let row of tableData; let i = index">
-        <td><input class="inputs" type="text" [(ngModel)]="row.season"></td>
-        <td><input class="inputs" type="number" [(ngModel)]="row.dow"></td>
-        <td><input class="inputs" type="number" [(ngModel)]="row.period"></td>
-        <td><input class="inputs" type="time" [(ngModel)]="row.startHour"></td>
-        <td><input class="inputs" type="time" [(ngModel)]="row.endHour"></td>
-        <td><input class="inputs" type="number" [(ngModel)]="row.opMode"></td>
-        <td style="display: flex; justify-content: center;"><button (click)="deleteRow(i)">Eliminar</button></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  <button (click)="addRow()">Agregar Fila</button>
-  <button style="margin-left: 10px;" (click)="saveTable()">Guardar Tabla</button>
-  
+<div class="contenedor-encabezado">
+  <label for="table-name">Nombre de la tabla:</label>
+  <input class="name custom-select" type="text" id="table-name" [(ngModel)]="tableName">
+
+  <label for="table-type">Tipo de Tarifa: </label>
+  <select class="input custom-select" id="type-tariff" [(ngModel)]="selectedTariff" (change)="updateSeasonOptions()">
+    <option class="custom-option" *ngFor="let key of tableTariffKeys" [value]="key">{{key}}</option>
+  </select>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Season</th>
+      <th>DOW</th>
+      <th>Start Hour</th>
+      <th>End Hour</th>
+      <th>Op. Mode</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of tableData; let i = index">
+      <td>
+        <select class="inputs custom-select" [(ngModel)]="row.season">
+          <option class="custom-option" *ngFor="let season of seasonOptions" [value]="season.value">{{ season.label }}</option>
+        </select>
+      </td>
+      <td>
+        <select class="inputs custom-select" [(ngModel)]="row.dow">
+          <option class="custom-option" *ngFor="let dow of dowOptions" [value]="dow.value">{{ dow.label }}</option>
+        </select>
+      </td>
+      
+      <td><input class="inputs" type="time" [(ngModel)]="row.startHour"></td>
+      <td><input class="inputs" type="time" [(ngModel)]="row.endHour"></td>
+      <td>
+        <select class="inputs custom-select" [(ngModel)]="row.opMode">
+          <option class="custom-option" *ngFor="let opMode of opModes" [value]="opMode.value">{{ opMode.label }}</option>
+        </select>
+      </td>
+      <td style="display: flex; justify-content: center;"><button (click)="deleteRow(i)">Eliminar</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<button (click)="addRow()">Agregar Fila</button>
+<button style="margin-left: 10px;" (click)="saveTable()">Guardar Tabla</button>
