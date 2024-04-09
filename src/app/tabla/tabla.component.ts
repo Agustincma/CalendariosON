@@ -47,6 +47,7 @@ export class TablaComponent {
   
     // Guarda los días de la semana disponibles para la tarifa seleccionada
     // this.allDow = this.dowOptions.map(dow => dow.value);
+    
   }
   
 
