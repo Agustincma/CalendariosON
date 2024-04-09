@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-tabla',
@@ -47,7 +49,7 @@ export class TablaComponent {
   
     // Guarda los días de la semana disponibles para la tarifa seleccionada
     // this.allDow = this.dowOptions.map(dow => dow.value);
-    
+
   }
   
 
@@ -55,7 +57,6 @@ export class TablaComponent {
     this.tableData.push({
       season: '',
       dow: '',
-      period: 0,
       startHour: '',
       endHour: '',
       opMode: 0
@@ -71,15 +72,33 @@ export class TablaComponent {
       name: this.tableName,
       data: this.tableData,
       nameTariff: this.selectedTariff,
-      // nameDow: this.allDow,
-      opModes: this.opModes // Modos de operación
+      opModes: this.opModes
     };
-    
-    const jsonData = JSON.stringify(table);
-    const blob = new Blob([jsonData], { type: 'application/json' });
-    
-    // Utiliza el nombre de la tabla como nombre del archivo
-    saveAs(blob, this.tableName + '.json');
+  
+    // Crear un objeto de trabajo de Excel
+    const wb = XLSX.utils.book_new();
+  
+    // Convertir los datos a una hoja de Excel
+    const ws = XLSX.utils.json_to_sheet(table.data);
+  
+    // Agregar la hoja al libro
+    XLSX.utils.book_append_sheet(wb, ws, 'Tabla');
+  
+    // Convertir el libro a un archivo binario
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+  
+    // Crear un blob con los datos binarios y descargarlo como archivo Excel
+    const blob = new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' });
+    saveAs(blob, this.tableName + '.xlsx');
   }
   
+  // Función para convertir de texto a binario
+  s2ab(s: string): ArrayBuffer {
+    const buf = new ArrayBuffer(s.length);
+    const view = new Uint8Array(buf);
+    for (let i = 0; i < s.length; i++) {
+      view[i] = s.charCodeAt(i) & 0xFF;
+    }
+    return buf;
+  }
 }
